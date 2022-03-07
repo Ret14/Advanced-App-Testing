@@ -70,7 +70,7 @@ def shutdown():
 def run_mock():
     server = threading.Thread(target=app.run, kwargs={
         'host': '0.0.0.0',
-        'port': 8081
+        'port': 4001
     })
     server.start()
     mysql_client.connect(db_created=True)
@@ -78,7 +78,7 @@ def run_mock():
 
 
 if __name__ == '__main__':
-    run_mock()
+    # run_mock()
     try:
         run_mock()
     except ServerTerminationError:

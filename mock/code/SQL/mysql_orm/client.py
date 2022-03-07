@@ -27,21 +27,7 @@ class MysqlORMClient:
         sm = sessionmaker(bind=self.connection.engine)  # session creation wrapper
         self.session = sm()
 
-    # def recreate_db(self):
-    #     self.connect(db_created=False)
-    #
-    #     # these two requests we need to do in ras SQL syntax
-    #     self.execute_query(f'DROP database if exists {self.db_name}', fetch=False)
-    #     self.execute_query(f'CREATE database {self.db_name}', fetch=False)
-    #
-    #     self.connection.close()
-
     def execute_query(self, query, fetch=True):
         res = self.connection.execute(query)
         if fetch:
             return res.fetchall()
-
-    # def create_tables(self, tables_list: list):
-    #     for table_name in tables_list:
-    #         if not inspect(self.engine).has_table(table_name):
-    #             Base.metadata.tables[table_name].create(self.engine)

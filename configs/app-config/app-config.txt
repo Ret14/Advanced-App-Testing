@@ -1,6 +1,6 @@
 APP_HOST = '0.0.0.0'
-APP_PORT = '8083'
+APP_PORT = '4003'
 MYSQL_HOST = 'percona'
 MYSQL_PORT = '3306'
 MYSQL_DB = 'TEST'
-VK_URL = 'mock:8081'
+VK_URL = 'mock:4001'

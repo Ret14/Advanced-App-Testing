@@ -23,9 +23,9 @@ from selenium.webdriver.chrome.options import Options
 
 
 def get_driver(selenoid_host):
-    # browser_name = config['browser']
-    # selenoid = config['selenoid']
-    # vnc = config['vnc']
+    # browser_name = app-config.txt['browser']
+    # selenoid = app-config.txt['selenoid']
+    # vnc = app-config.txt['vnc']
 
     options = Options()
     options.add_experimental_option("prefs", {"download.default_directory": '/home/selenium/Downloads'})
@@ -57,11 +57,11 @@ def driver():
 
 
 # @pytest.fixture(scope='function', params=['chrome', 'firefox'])
-# def all_drivers(config, request):
-#     url = config['url']
-#     config['browser'] = request.param
+# def all_drivers(app-config.txt, request):
+#     url = app-config.txt['url']
+#     app-config.txt['browser'] = request.param
 #
-#     browser = get_driver(config)
+#     browser = get_driver(app-config.txt)
 #     browser.get(url)
 #     yield browser
 #     browser.quit()

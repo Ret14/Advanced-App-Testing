@@ -9,9 +9,6 @@ class AppUsers(Base):
     __tablename__ = 'test_users'
     __table_args__ = {'mysql_charset': 'utf8'}
 
-    # def __repr__(self):
-    #     return f"{self.username} {self.active}"
-
     id = Column(Integer, primary_key=True, nullable=False, autoincrement=True)
     username = Column(String(16), nullable=True, unique=True)
     password = Column(String(255), nullable=False)
