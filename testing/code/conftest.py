@@ -29,7 +29,6 @@ def logger(temp_dir):
 
 
 def pytest_configure(config):
-
     base_dir = '/tmp/tests'
 
     if not hasattr(config, 'workerinput'):  # in master only

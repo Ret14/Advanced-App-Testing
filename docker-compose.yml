@@ -6,11 +6,15 @@ networks:
     name: test-net
 
 services:
-#  tests:
-#    container_name: tests
-#    build: ./testing
-#    volumes:
-#      - ./allure-report:/tmp/allure
+  tests:
+    container_name: tests
+    build: ./testing
+    volumes:
+      - ./allure-report:/tmp/allure
+      - ./logs:/tmp/tests
+    depends_on:
+      myapp:
+        condition: service_healthy
 
   mock:
     container_name: mock
@@ -32,7 +36,7 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: pass
     ports:
-      - "3306:3306"
+      - "4002:3306"
     volumes:
       - ./configs/sql_config:/docker-entrypoint-initdb.d
     healthcheck:
