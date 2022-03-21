@@ -30,13 +30,13 @@ def logger(temp_dir):
 
 
 def pytest_configure(config):
-    base_dir = '/tmp/tests'
+    base_dir = '/src/logs'
 
-    if not hasattr(config, 'workerinput'):  # in master only
-        if os.path.exists(base_dir):
-            shutil.rmtree(base_dir)
-
-        os.makedirs(base_dir)
+    # if not hasattr(config, 'workerinput'):  # in master only
+    #     if os.path.exists(base_dir):
+    #         shutil.rmtree(base_dir)
+    #
+    #     os.makedirs(base_dir)
 
     config.base_temp_dir = base_dir  # everywhere
 
