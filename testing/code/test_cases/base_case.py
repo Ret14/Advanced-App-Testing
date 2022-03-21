@@ -2,6 +2,7 @@ import random
 import string
 import time
 import pytest
+import os
 from API.api_client import ApiClient
 from SQL.models.model import AppUsers
 from SQL.mysql_orm.client import MysqlORMClient
@@ -10,10 +11,10 @@ from SQL.mysql_orm.client import MysqlORMClient
 class BaseCase:
 
     @pytest.fixture(scope='function', autouse=True)
-    def start_system(self, user_data, credentials, logger):
+    def start_system(self, user_data, logger):
         self.mysql_client = MysqlORMClient()
         self.mysql_client.connect()
-        self.api_client = ApiClient(credentials)
+        self.api_client = ApiClient(os.environ['USERNAME'], os.environ['PASSWORD'])
         self.user_data = user_data
         self.username = user_data[0]
         yield

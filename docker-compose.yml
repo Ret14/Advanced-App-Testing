@@ -12,6 +12,9 @@ services:
     volumes:
       - ./allure-report:/tmp/allure
       - ./logs:/tmp/tests
+    environment:
+      - USERNAME
+      - PASSWORD
     depends_on:
       myapp:
         condition: service_healthy

@@ -1,4 +1,4 @@
-from test_files.base_case import BaseCase
+from test_cases.base_case import BaseCase
 import pytest
 
 class TestApi(BaseCase):

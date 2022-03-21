@@ -1,7 +1,8 @@
 import logging
+import os
 import shutil
 import allure
-from code.fixtures.docker_compose import *
+import pytest
 
 
 @pytest.fixture(scope='function')
