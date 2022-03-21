@@ -8,4 +8,4 @@ RUN chmod +x /src/start_tests.sh
 ADD code /src/code
 
 WORKDIR /src
-CMD ["./start_tests.sh"]
+CMD ["sh", "./start_tests.sh"]
