@@ -1,5 +1,5 @@
 FROM python:3.8
-ADD requirements.txt /requirements.txt
+ADD requirements.txt /src/requirements.txt
 
 RUN pip3.8 install -r /src/requirements.txt && rm -f /src/requirements.txt
 
