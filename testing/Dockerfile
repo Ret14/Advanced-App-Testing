@@ -7,4 +7,4 @@ ADD start_tests.sh /src/start_tests.sh
 ADD code /src/code
 
 WORKDIR /src
-CMD ["./start_tests.sh"]
+CMD ["sh","./start_tests.sh"]
