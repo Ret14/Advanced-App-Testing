@@ -8,7 +8,7 @@ networks:
 services:
   tests:
     container_name: tests
-    image: "tests:latest"
+    build: ./testing
     volumes:
       - ./allure-report:/tmp/allure
       - ./logs:/src/logs

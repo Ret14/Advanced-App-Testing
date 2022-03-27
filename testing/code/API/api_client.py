@@ -60,7 +60,7 @@ class ApiClient:
     @staticmethod
     def log_pre(method, url, summary, expected_status=200):
         logger.info(f'-{summary}- Performing request:\n'
-                    f'Method: {method}'
+                    f'Method: {method}\n'
                     f'URL: {url}\n'
                     f'Expected status: {expected_status}\n')
 

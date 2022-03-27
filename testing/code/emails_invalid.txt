@@ -1,0 +1,20 @@
+plaintextaddress
+@#@@##@%^%#$@#$@#.com
+@email.com
+John Doe <example@email.com>
+example.email.com
+example@example@email.com
+.example@email.com
+example.@email.com
+example…example@email.com
+おえあいう@example.com
+example@email.com (John Doe)
+example@email
+example@-email.com
+example@email.web
+example@111.222.333.44444
+example@email…com
+CAT…123@email.com
+”(),:;<>[\]@email.com
+obviously”not”correct@email.com
+example\ is”especially”not\allowed@email.com
