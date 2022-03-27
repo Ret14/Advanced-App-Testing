@@ -59,5 +59,5 @@ class TestApiFieldValid(BaseCase):
     def test_fields_validation_positive(self, login, password, email, request):
         email = request.getfixturevalue(email)
         response = self.api_client.post_add_user(login, password, email)
-        assert response.status_code == 201 and self.check_user_pass_email(login, password, email)
+        assert self.check_user_pass_email(login, password, email)
         self.api_client.get_delete_user(login)

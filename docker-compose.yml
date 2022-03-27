@@ -10,11 +10,12 @@ services:
     container_name: tests
     build: ./testing
     volumes:
-      - ./allure-report:/tmp/allure
-      - ./logs:/src/logs
+      - "$WORKSPACE/allure-report:/tmp/allure"
+      - "$WORKSPACE/logs:/src/logs"
     environment:
       - USERNAME
       - PASSWORD
+      - WORKSPACE
     depends_on:
       myapp:
         condition: service_healthy
