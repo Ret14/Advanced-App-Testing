@@ -31,20 +31,18 @@ def logger(temp_dir):
 
 def pytest_configure(config):
     base_dir = '/src/logs'
+    config.base_temp_dir = base_dir
 
-    # if not hasattr(config, 'workerinput'):  # in master only
-    #     if os.path.exists(base_dir):
-    #         shutil.rmtree(base_dir)
-    #
-    #     os.makedirs(base_dir)
 
-    config.base_temp_dir = base_dir  # everywhere
+def pytest_unconfigure(config):
+    if not hasattr(config, 'workerinput'):
+        os.chmod("/tmp/allure", 0o777)
 
 
 @pytest.fixture(scope='function')
 def temp_dir(request):
     test_dir = os.path.join(request.config.base_temp_dir,
-                            request._pyfuncitem.nodeid.replace('/', '_').replace(':', '_'))
+                            request._pyfuncitem.node.originalname.replace('/', '_').replace(':', '_'))
     os.makedirs(test_dir)
     return test_dir
 
