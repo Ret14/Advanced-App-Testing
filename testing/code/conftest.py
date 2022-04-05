@@ -42,8 +42,8 @@ def pytest_unconfigure(config):
 @pytest.fixture(scope='function')
 def temp_dir(request):
     components = request.node.nodeid.split("::")
-    filename = components[0]
-    test_class = components[1] if len(components) == 3 else None
+    # filename = components[0]
+    # test_class = components[1] if len(components) == 3 else None
     test_func_with_params = components[-1]
     test_func = test_func_with_params.split('[')[0]
     test_params = test_func_with_params.split('[')[1][:-1].split('-')
