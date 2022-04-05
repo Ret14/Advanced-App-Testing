@@ -46,8 +46,8 @@ def temp_dir(request):
     # test_class = components[1] if len(components) == 3 else None
     test_func_with_params = components[-1]
     test_func = test_func_with_params.split('[')[0]
-    test_params = test_func_with_params.split('[')[1][:-1].split('-')
-    if test_params:
+    if '[' in test_func_with_params:
+        test_params = test_func_with_params.split('[')[1][:-1].split('-')
         test_func = f"{test_func}['{test_params[0]}']"
 
     test_dir = os.path.join(request.config.base_temp_dir, test_func)
