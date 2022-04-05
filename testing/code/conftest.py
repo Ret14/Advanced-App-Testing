@@ -41,8 +41,14 @@ def pytest_unconfigure(config):
 
 @pytest.fixture(scope='function')
 def temp_dir(request):
-    test_dir = os.path.join(request.config.base_temp_dir,
-                            request._pyfuncitem.node.originalname.replace('/', '_').replace(':', '_'))
+    components = request.node.nodeid.split("::")
+    filename = components[0]
+    test_class = components[1] if len(components) == 3 else None
+    test_func_with_params = components[-1]
+    test_func = test_func_with_params.split('[')[0]
+    test_params = test_func_with_params.split('[')[1][:-1].split('-')
+    test_name = f"{test_func}['{test_params[0]}']"
+    test_dir = os.path.join(request.config.base_temp_dir, test_name)
     os.makedirs(test_dir)
     return test_dir
 

@@ -2,7 +2,6 @@
 documentation.md
 .idea/
 credentials.txt
-cleaning.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
