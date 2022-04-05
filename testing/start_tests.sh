@@ -2,4 +2,4 @@
 
 cd code
 
-pytest -s -l -v --alluredir /tmp/allure
+pytest -s -l -v --alluredir=/tmp/allure
