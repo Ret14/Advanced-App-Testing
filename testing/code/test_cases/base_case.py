@@ -32,7 +32,8 @@ class BaseCase:
 
     @staticmethod
     def random_ascii(min_len, max_len):
-        return ''.join(random.choice(string.printable) for _ in range(random.randint(min_len, max_len)))
+        letters_set = string.printable.replace('/', '')
+        return ''.join(random.choice(letters_set) for _ in range(random.randint(min_len, max_len)))
 
     def check_user_pass_email(self, username, password, email):
         self.mysql_client.session.commit()
