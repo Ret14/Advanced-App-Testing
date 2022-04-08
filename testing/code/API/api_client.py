@@ -58,35 +58,43 @@ class ApiClient:
         return response
 
     @staticmethod
-    def log_pre(method, url, summary, expected_status=200):
-        logger.info(f'-{summary}- Performing request:\n'
-                    f'Method: {method}\n'
+    def log_pre(method, url, summary, json=None):
+        logger.info(f'\n'
+                    f'COMMENT: {summary}\n'
+                    f'METHOD: {method}\n'
                     f'URL: {url}\n'
-                    f'Expected status: {expected_status}\n')
+                    f'DATA: {json if not json is None else "None"}'
+                    )
 
     @staticmethod
     def log_post(response):
-        log_str = f'RESPONSE STATUS: {response.status_code}'
+        # log_str = f'RESPONSE STATUS: {response.status_code}'
+        #
+        # if len(response.text) > MAX_RESPONSE_LENGTH:
+        #     if logger.level == logging.INFO:
+        #         logger.info(f'{log_str}\n'
+        #                     f'RESPONSE CONTENT: COLLAPSED due to response size > {MAX_RESPONSE_LENGTH}. '
+        #                     f'Use DEBUG logging.\n'
+        #                     f'{response.text[:MAX_RESPONSE_LENGTH]}'
+        #                     )
+        #     elif logger.level == logging.DEBUG:
+        #         logger.info(f'{log_str}\n'
+        #                     f'RESPONSE CONTENT: {response.text if response.text else "None"}\n\n'
+        #                     )
+        # else:
+        #     logger.info(f'{log_str}\n'
+        #                 f'RESPONSE CONTENT: {response.text if response.text else "None"}\n'
+        #                 )
 
-        if len(response.text) > MAX_RESPONSE_LENGTH:
-            if logger.level == logging.INFO:
-                logger.info(f'{log_str}\n'
-                            f'RESPONSE CONTENT: COLLAPSED due to response size > {MAX_RESPONSE_LENGTH}. '
-                            f'Use DEBUG logging.\n'
-                            f'{response.text[:MAX_RESPONSE_LENGTH]}'
-                            )
-            elif logger.level == logging.DEBUG:
-                logger.info(f'{log_str}\n'
-                            f'RESPONSE CONTENT: {response.text}\n\n'
-                            )
-        else:
-            logger.info(f'{log_str}\n'
-                        f'RESPONSE CONTENT: {response.text}\n'
-                        )
+        logger.info(f'\n'
+                    f'RESPONSE STATUS: {response.status_code}\n'
+                    f'RESPONSE CONTENT: {response.text if response.text else "None"}'
+                    )
 
-    def logged_request(self, summary, method, url, allow_redirects=True, json=None, expected_status=200):
-        self.log_pre(method, url, summary, expected_status)
-        response = self.session.request(method=method, url=url, allow_redirects=allow_redirects, json=json)
+    def logged_request(self, summary, method, url, allow_redirects=True, json=None, data=None):
+        self.log_pre(method, url, summary, json)
+        response = self.session.request(method=method, url=url, allow_redirects=allow_redirects,
+                                        json=json, data=data)
         self.log_post(response)
         return response
 
