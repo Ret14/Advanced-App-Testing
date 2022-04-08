@@ -10,7 +10,7 @@ services:
     container_name: tests
     build: ./testing
     volumes:
-      - "$WORKSPACE/allure-report:/tmp/allure"
+      - "$WORKSPACE/allure-results:/tmp/allure"
       - "$WORKSPACE/logs:/src/logs"
     environment:
       - USERNAME
