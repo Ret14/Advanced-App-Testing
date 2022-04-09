@@ -7,7 +7,6 @@ example@example@email.com
 .example@email.com
 example.@email.com
 example…example@email.com
-おえあいう@example.com
 example@email.com (John Doe)
 example@email
 example@-email.com
