@@ -1,5 +1,6 @@
 import logging
 import requests
+import allure
 
 logger = logging.getLogger('test')
 MAX_RESPONSE_LENGTH = 300
@@ -12,11 +13,13 @@ class ApiClient:
         self.app_url = 'http://myapp:4003'
         self.post_login(username, password)
 
+    @allure.step('Getting app status with http request')
     def get_status(self):
         response = self.logged_request(method='GET', url=f'{self.app_url}/status',
                                        summary='Getting app status')
         return response
 
+    @allure.step('Adding user with http request')
     def post_add_user(self, username, password, email):
         data = {
             "username": username,
@@ -28,24 +31,28 @@ class ApiClient:
                                        summary='Adding user', json=data)
         return response
 
+    @allure.step('Deleting user with http request')
     def get_delete_user(self, username):
 
         response = self.logged_request(method='GET', url=f'{self.app_url}/api/del_user/{username}',
                                        summary='Deleting user')
         return response
 
+    @allure.step('Blocking user with http request')
     def get_block_user(self, username):
 
         response = self.logged_request(method='GET', url=f'{self.app_url}/api/block_user/{username}',
                                        summary='Blocking user')
         return response
 
+    @allure.step('Unblocking user with http request')
     def get_unblock_user(self, username):
 
         response = self.logged_request(method='GET', url=f'{self.app_url}/api/accept_user/{username}',
                                        summary='Unblocking user')
         return response
 
+    @allure.step('Signing into account with http request')
     def post_login(self, login, password):
         data = {
             'username': login,
@@ -73,23 +80,6 @@ class ApiClient:
 
     @staticmethod
     def log_post(response):
-        # log_str = f'RESPONSE STATUS: {response.status_code}'
-        #
-        # if len(response.text) > MAX_RESPONSE_LENGTH:
-        #     if logger.level == logging.INFO:
-        #         logger.info(f'{log_str}\n'
-        #                     f'RESPONSE CONTENT: COLLAPSED due to response size > {MAX_RESPONSE_LENGTH}. '
-        #                     f'Use DEBUG logging.\n'
-        #                     f'{response.text[:MAX_RESPONSE_LENGTH]}'
-        #                     )
-        #     elif logger.level == logging.DEBUG:
-        #         logger.info(f'{log_str}\n'
-        #                     f'RESPONSE CONTENT: {response.text if response.text else "None"}\n\n'
-        #                     )
-        # else:
-        #     logger.info(f'{log_str}\n'
-        #                 f'RESPONSE CONTENT: {response.text if response.text else "None"}\n'
-        #                 )
 
         logger.info(f'\n'
                     f'RESPONSE STATUS: {response.status_code}\n'
