@@ -32,7 +32,10 @@ class BaseCase:
 
     @staticmethod
     def random_ascii(min_len, max_len):
-        letters_set = string.printable.replace('/', '')
+        letters_set = string.printable
+        for symbol in ('"', "'", '/', '\\'):
+            letters_set = letters_set.replace(symbol, '')
+
         return ''.join(random.choice(letters_set) for _ in range(random.randint(min_len, max_len)))
 
     def check_user_pass_email(self, username, password, email):
@@ -49,3 +52,12 @@ class BaseCase:
     @pytest.fixture(scope='function')
     def user_data(self):
         return self.random_ascii(5, 16), self.random_ascii(1, 255), self.fake.email()
+
+    @staticmethod
+    def read_file(filename):
+        file_lines = []
+        with open(filename, 'r') as f:
+            for line in f:
+                file_lines.append(line.strip())
+
+        return file_lines

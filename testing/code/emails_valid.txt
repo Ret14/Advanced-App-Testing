@@ -12,7 +12,6 @@ example@email.name
 example@email.museum
 example@email.co.jp
 example.firstname-lastname@email.com
-Valid Email Addresses that appear at glance to be invalid
 extremely.”odd\unusual”@example.com
 extremely.unusual.”@”.unusual.com@example.com
 very.”(),:;<>[]”.VERY.”very@\\ “very”.unusual@strange.email.example.com

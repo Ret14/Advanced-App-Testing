@@ -59,11 +59,16 @@ class ApiClient:
 
     @staticmethod
     def log_pre(method, url, summary, json=None):
+        data = ''
+        if not json is None:
+            for elem in json:
+                data += f'{elem}: {json[elem]}\n'
+
         logger.info(f'\n'
                     f'COMMENT: {summary}\n'
                     f'METHOD: {method}\n'
                     f'URL: {url}\n'
-                    f'DATA: {json if not json is None else "None"}'
+                    f'DATA: {data if data else "None"}\n'
                     )
 
     @staticmethod
@@ -88,7 +93,7 @@ class ApiClient:
 
         logger.info(f'\n'
                     f'RESPONSE STATUS: {response.status_code}\n'
-                    f'RESPONSE CONTENT: {response.text if response.text else "None"}'
+                    f'RESPONSE CONTENT: {response.text if response.text else "None"}\n'
                     )
 
     def logged_request(self, summary, method, url, allow_redirects=True, json=None, data=None):
@@ -97,4 +102,3 @@ class ApiClient:
                                         json=json, data=data)
         self.log_post(response)
         return response
-
