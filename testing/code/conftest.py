@@ -55,25 +55,9 @@ def temp_dir(request):
     return test_dir
 
 
-# @pytest.fixture(scope='session')
-# def credentials(repo_root, file_name='credentials.txt'):
-#     cred_path = os.path.join(repo_root, file_name)
-#     with open(cred_path, 'r') as f:
-#         user = f.readline().strip()
-#         password = f.readline().strip()
-#
-#     return user, password
-
-
 @pytest.fixture(scope='session')
 def api_client():
     return ApiClient(os.environ['USERNAME'], os.environ['PASSWORD'])
-
-
-@pytest.fixture(scope='session')
-def valid_email():
-    with open('emails_valid.txt', 'r') as f:
-        yield f.readline().strip()
 
 
 @pytest.fixture(scope='session')

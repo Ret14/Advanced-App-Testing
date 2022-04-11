@@ -2,38 +2,14 @@ import logging
 import allure
 import pytest
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-# from webdriver_manager.chrome import ChromeDriverManager
-# from webdriver_manager.firefox import GeckoDriverManager
 
 
-# @pytest.fixture
-# def base_page(driver):
-#     return BasePage(driver=driver)
-#
-#
-# @pytest.fixture
-# def main_page(driver):
-#     return MainPage(driver=driver)
-#
-#
-# @pytest.fixture
-# def search_page(driver):
-#     return SearchPage(driver=driver)
-
-
-def get_driver(selenoid_host):
-    # browser_name = app-config.txt['browser']
-    # selenoid = app-config.txt['selenoid']
-    # vnc = app-config.txt['vnc']
-
-    options = Options()
-    options.add_experimental_option("prefs", {"download.default_directory": '/home/selenium/Downloads'})
+def get_driver():
     capabilities = dict()
-    # capabilities['version'] += '_vnc'
+    capabilities['browserName'] = 'chrome'
     capabilities['enableVNC'] = True
 
-    browser = webdriver.Remote(f'http://{selenoid_host}:4444/wd/hub', options=options,
+    browser = webdriver.Remote(f'http://selenoid:4444/wd/hub',
                                desired_capabilities=capabilities)
     browser.maximize_window()
     return browser
@@ -43,10 +19,10 @@ def get_driver(selenoid_host):
 def driver():
     browsers = []
 
-    def _driver(app_host, selenoid_host):
-        url = f'http://{app_host}:8083'
+    def _driver():
+        url = f'http://myapp:4003'
         with allure.step('Init browser'):
-            browser = get_driver(selenoid_host)
+            browser = get_driver()
             browsers.append(browser)
             browser.get(url)
         return browser

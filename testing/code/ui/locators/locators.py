@@ -16,6 +16,6 @@ class RegistryPageLocators(BaseLocators):
 
 class LoginPageLocators(BaseLocators):
     USERNAME_INPUT = (By.ID, 'username')
-    PASS_INPUT = (By.ID, 'password')
+    PASSWORD_INPUT = (By.ID, 'password')
     SUBMIT_BTN = (By.ID, 'submit')
     REGISTRY_FIELD = (By.XPATH, '//a')

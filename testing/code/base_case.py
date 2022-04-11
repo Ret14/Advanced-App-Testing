@@ -1,20 +1,25 @@
-import pytest
-from SQL.models.model import AppUsers
-from SQL.mysql_orm.client import MysqlORMClient
-import string
 import random
+import string
+import pytest
 from faker import Faker
+from SQL.mysql_orm.client import MysqlORMClient
+from SQL.models.model import AppUsers
 
 
 class BaseCase:
+
     fake = Faker()
 
-    @pytest.fixture(scope='function', autouse=True)
-    def start_system(self, user_data, logger, api_client):
+    def __init__(self):
+        self.letters_set = string.printable
+        for symbol in ('"', "'", '/', '\\'):
+            self.letters_set = self.letters_set.replace(symbol, '')
+
+    @pytest.fixture(scope='function')
+    def init_system(self, user_data, logger, temp_dir):
         self.mysql_client = MysqlORMClient()
         self.mysql_client.connect()
-        self.api_client = api_client
-        #self.api_client = ApiClient(*credentials)
+        self.test_dir = temp_dir
         self.user_data = user_data
         self.username = user_data[0]
         yield
@@ -30,24 +35,15 @@ class BaseCase:
         return self.mysql_client.session.query(AppUsers).filter(
             AppUsers.username == username, AppUsers.access == access).all()
 
-    @staticmethod
-    def random_ascii(min_len, max_len):
-        letters_set = string.printable
-        for symbol in ('"', "'", '/', '\\'):
-            letters_set = letters_set.replace(symbol, '')
+    def random_ascii(self, min_len, max_len):
 
-        return ''.join(random.choice(letters_set) for _ in range(random.randint(min_len, max_len)))
+        return ''.join(random.choice(self.letters_set) for _ in range(random.randint(min_len, max_len)))
 
     def check_user_pass_email(self, username, password, email):
         self.mysql_client.session.commit()
         return self.mysql_client.session.query(AppUsers).filter(
             AppUsers.username == username, AppUsers.password == password,
             AppUsers.email == email).all()
-
-    @pytest.fixture(scope='function')
-    def new_user(self, user_data):
-        yield self.api_client.post_add_user(*user_data)
-        self.api_client.get_delete_user(user_data[0])
 
     @pytest.fixture(scope='function')
     def new_user_to_db(self, user_data):
@@ -68,7 +64,7 @@ class BaseCase:
 
     @pytest.fixture(scope='function')
     def user_data(self):
-        return self.random_ascii(5, 16), self.random_ascii(1, 255), self.fake.email()
+        return [self.random_ascii(5, 16), self.random_ascii(1, 255), self.fake.email()]
 
     @staticmethod
     def read_file(filename):
