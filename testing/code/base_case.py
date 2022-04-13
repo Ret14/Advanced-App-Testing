@@ -11,13 +11,12 @@ class BaseCase:
     fake = Faker()
 
     @pytest.fixture(scope='function')
-    def init_system(self, user_data, logger, temp_dir, get_char_set):
+    def init_system(self, logger, temp_dir, user_data):
         self.mysql_client = MysqlORMClient()
         self.mysql_client.connect()
         self.test_dir = temp_dir
         self.user_data = user_data
         self.username = user_data[0]
-        self.letters_set = get_char_set
         yield
         self.mysql_client.connection.close()
 
@@ -32,8 +31,9 @@ class BaseCase:
             AppUsers.username == username, AppUsers.access == access).all()
 
     def random_ascii(self, min_len, max_len):
+        letters_set = self.read_file('./utils/printable.txt')[0]
 
-        return ''.join(random.choice(self.letters_set) for _ in range(random.randint(min_len, max_len)))
+        return ''.join(random.choice(letters_set) for _ in range(random.randint(min_len, max_len)))
 
     def check_user_pass_email(self, username, password, email):
         self.mysql_client.session.commit()
@@ -70,10 +70,3 @@ class BaseCase:
                 file_lines.append(line.strip())
 
         return file_lines
-
-    @pytest.fixture(scope='session')
-    def get_char_set(self):
-        letters_set = string.printable
-        for symbol in ('"', "'", '/', '\\'):
-            letters_set = letters_set.replace(symbol, '')
-        return letters_set
