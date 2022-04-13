@@ -70,7 +70,6 @@ services:
   selenoid:
     image: "aerokube/selenoid"
     container_name: selenoid
-    network_mode: bridge
     volumes:
       - ./configs/selenoid_config/config:/etc/selenoid
       - /var/run/docker.sock:/var/run/docker.sock
@@ -80,7 +79,7 @@ services:
       - OVERRIDE_VIDEO_OUTPUT_DIR=./configs/selenoid_config/video
     command: [ "-conf", "/etc/selenoid/browsers.json", "-video-output-dir",
                "/opt/selenoid/video", "-log-output-dir", "/opt/selenoid/logs",
-               "-container-network", "test-net" ]
+               "-container-network", "test-net", "-session-attempt-timeout", "3m0s" ]
     ports:
       - "4004:4444"
 
