@@ -4,6 +4,7 @@ from selenium import webdriver
 import pytest
 import allure
 from ui.pages.login_page import LoginPage
+from selenium.webdriver.chrome.options import Options
 
 
 class BaseCaseUI(BaseCase):
@@ -17,27 +18,23 @@ class BaseCaseUI(BaseCase):
         capabilities = dict()
         capabilities['browserName'] = 'chrome'
         capabilities['enableVNC'] = True
-
-        browser = webdriver.Remote(f'http://selenoid:4444/wd/hub',
+        capabilities['version'] = '96.0'
+        options = Options()
+        browser = webdriver.Remote(command_executor='http://selenoid:4444/wd/hub', options=options,
                                    desired_capabilities=capabilities)
         browser.maximize_window()
         return browser
 
     @pytest.fixture(scope='function')
     def driver(self):
-        browsers = []
+        url = f'http://myapp:4003'
+        with allure.step('Init browser'):
+            browser = self.get_driver()
+            browser.get(url)
 
-        def _driver():
-            url = f'http://myapp:4003'
-            with allure.step('Init browser'):
-                browser = self.get_driver()
-                browsers.append(browser)
-                browser.get(url)
-            return browser
+        yield browser
 
-        yield _driver
-        for browser in browsers:
-            browser.quit()
+        browser.quit()
 
     @pytest.fixture(scope='function')
     def ui_report(self, driver, request, temp_dir):

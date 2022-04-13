@@ -19,9 +19,6 @@ class BasePage(object):
     def __init__(self, driver):
         self.driver = driver
         self.logger = logging.getLogger('test')
-        self.letters_set = string.printable
-        for symbol in ('"', "'", '/', '\\'):
-            self.letters_set = self.letters_set.replace(symbol, '')
         self.logger.info(f'Going to {self.__class__.__name__}')
 
     def wait(self, timeout=None):
@@ -61,7 +58,7 @@ class BasePage(object):
                     raise
 
     def elements_find(self, locator):
-        return self.driver.find_elements(*locator)
+        return self.driver.find_elements(locator[0], locator[1])
 
     def not_on_page(self, locator):
         return not self.elements_find(locator=locator)
@@ -81,6 +78,16 @@ class BasePage(object):
             time.sleep(interval)
         return current_url
 
-    def random_ascii(self, min_len, max_len):
+    @staticmethod
+    def read_file(filename):
+        file_lines = []
+        with open(filename, 'r') as f:
+            for line in f:
+                file_lines.append(line.strip())
 
-        return ''.join(random.choice(self.letters_set) for _ in range(random.randint(min_len, max_len)))
+        return file_lines
+
+    def random_ascii(self, min_len, max_len):
+        letters_set = self.read_file('./utils/printable.txt')[0]
+
+        return ''.join(random.choice(letters_set) for _ in range(random.randint(min_len, max_len)))

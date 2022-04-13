@@ -68,7 +68,7 @@ services:
         condition: service_healthy
 
   selenoid:
-    image: aerokube/selenoid:latest
+    image: "aerokube/selenoid"
     container_name: selenoid
     volumes:
       - ./configs/selenoid_config/config:/etc/selenoid
