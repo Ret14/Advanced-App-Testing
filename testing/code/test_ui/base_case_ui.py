@@ -9,7 +9,7 @@ from ui.pages.login_page import LoginPage
 class BaseCaseUI(BaseCase):
 
     @pytest.fixture(scope='function', autouse=True)
-    def init_api(self, init_system, driver, ui_report):
+    def init_ui(self, init_system, driver, ui_report):
         self.driver = driver
         self.login_page = LoginPage(driver=driver)
 

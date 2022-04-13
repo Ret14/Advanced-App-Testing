@@ -10,18 +10,14 @@ class BaseCase:
 
     fake = Faker()
 
-    def __init__(self):
-        self.letters_set = string.printable
-        for symbol in ('"', "'", '/', '\\'):
-            self.letters_set = self.letters_set.replace(symbol, '')
-
     @pytest.fixture(scope='function')
-    def init_system(self, user_data, logger, temp_dir):
+    def init_system(self, user_data, logger, temp_dir, get_char_set):
         self.mysql_client = MysqlORMClient()
         self.mysql_client.connect()
         self.test_dir = temp_dir
         self.user_data = user_data
         self.username = user_data[0]
+        self.letters_set = get_char_set
         yield
         self.mysql_client.connection.close()
 
@@ -74,3 +70,10 @@ class BaseCase:
                 file_lines.append(line.strip())
 
         return file_lines
+
+    @pytest.fixture(scope='session')
+    def get_char_set(self):
+        letters_set = string.printable
+        for symbol in ('"', "'", '/', '\\'):
+            letters_set = letters_set.replace(symbol, '')
+        return letters_set
