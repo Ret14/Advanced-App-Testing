@@ -12,6 +12,7 @@ services:
     volumes:
       - "$WORKSPACE/allure-results:/tmp/allure"
       - "$WORKSPACE/logs:/src/logs"
+      - "$WORKSPACE/allure-report:/tmp/allure-report"
     environment:
       - USERNAME
       - PASSWORD

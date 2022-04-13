@@ -36,7 +36,8 @@ def pytest_configure(config):
 
 def pytest_unconfigure(config):
     if not hasattr(config, 'workerinput'):
-        os.chmod("/tmp/allure", 0o777)
+        for directory in ("/tmp/allure", "/src/logs", "/tmp/allure-report"):
+            os.chmod(directory, 0o777)
 
 
 @pytest.fixture(scope='function')
