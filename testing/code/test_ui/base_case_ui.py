@@ -19,8 +19,7 @@ class BaseCaseUI(BaseCase):
         capabilities['browserName'] = 'chrome'
         capabilities['enableVNC'] = True
         capabilities['version'] = '96.0'
-        options = Options()
-        browser = webdriver.Remote(command_executor='http://selenoid:4444/wd/hub', options=options,
+        browser = webdriver.Remote(command_executor='http://selenoid:4444/wd/hub',
                                    desired_capabilities=capabilities)
         browser.maximize_window()
         return browser

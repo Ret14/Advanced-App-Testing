@@ -4,7 +4,7 @@
         "versions": {
             "96.0": {
                 "image": "selenoid/vnc_chrome:96.0",
-                "path": "/"
+                "port": "4444"
             }
         }
     }

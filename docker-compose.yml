@@ -20,8 +20,6 @@ services:
     depends_on:
       myapp:
         condition: service_healthy
-      selenoid:
-        condition: service_healthy
 
   mock:
     container_name: mock
@@ -72,6 +70,7 @@ services:
   selenoid:
     image: "aerokube/selenoid"
     container_name: selenoid
+    network_mode: bridge
     volumes:
       - ./configs/selenoid_config/config:/etc/selenoid
       - /var/run/docker.sock:/var/run/docker.sock
@@ -79,10 +78,6 @@ services:
       - ./configs/selenoid_config/logs:/opt/selenoid/logs
     environment:
       - OVERRIDE_VIDEO_OUTPUT_DIR=./configs/selenoid_config/video
-    healthcheck:
-      test: [ "CMD", "curl", "http://selenoid:4444/status" ]
-      timeout: 1s
-      retries: 30
     command: [ "-conf", "/etc/selenoid/browsers.json", "-video-output-dir",
                "/opt/selenoid/video", "-log-output-dir", "/opt/selenoid/logs",
                "-container-network", "test-net" ]
@@ -92,9 +87,6 @@ services:
   selenoid-ui:
     container_name: selenoid-ui
     image: "aerokube/selenoid-ui"
-    depends_on:
-      selenoid:
-        condition: service_healthy
     ports:
       - "4005:8080"
     command: [ "--selenoid-uri", "http://selenoid:4444" ]
