@@ -78,9 +78,9 @@ class TestApiFieldValid(BaseCaseApi):
         response = self.api_client.post_add_user(*self.user_data)
         assert response.status_code != 500 and not self.check_user_pass_email(*self.user_data)
 
-    @allure.description("""Negative testing of the username field validation in API""")
-    @pytest.mark.parametrize('username', [BaseCaseApi.random_ascii(min_len=n, max_len=n) for n in (0, 1, 2, 3, 4, 17)])
-    def test_username_validation_negative(self, username):
-        self.user_data[0] = username
-        response = self.api_client.post_add_user(*self.user_data)
-        assert response.status_code != 500 and not self.check_user_pass_email(*self.user_data)
+    # @allure.description("""Negative testing of the username field validation in API""")
+    # @pytest.mark.parametrize('username', [BaseCaseApi.random_ascii(min_len=n, max_len=n) for n in (0, 1, 2, 3, 4, 17)])
+    # def test_username_validation_negative(self, username):
+    #     self.user_data[0] = username
+    #     response = self.api_client.post_add_user(*self.user_data)
+    #     assert response.status_code != 500 and not self.check_user_pass_email(*self.user_data)
