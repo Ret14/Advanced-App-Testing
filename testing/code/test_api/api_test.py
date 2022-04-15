@@ -5,6 +5,26 @@ from test_api.base_case_api import BaseCaseApi
 
 class TestApi(BaseCaseApi):
 
+    @allure.description("""Logging in with correct credentials via API""")
+    @pytest.mark.usefixtures('new_user_to_db, not_authorized')
+    def test_login_positive(self):
+        response = self.api_client.post_login(*self.user_data)
+        assert response.status_code == 302 and self.check_user_active(self.username, 1)
+
+    @allure.description("""Logging in with incorrect username via API""")
+    @pytest.mark.usefixtures('new_user_to_db, not_authorized')
+    def test_login_positive(self):
+        self.user_data[0] = self.random_ascii(6, 16)
+        response = self.api_client.post_login(*self.user_data)
+        assert response.status_code == 401 and self.check_user_active(self.username, 0)
+
+    @allure.description("""Logging in with incorrect password via API""")
+    @pytest.mark.usefixtures('new_user_to_db, not_authorized')
+    def test_login_positive(self):
+        self.user_data[1] = self.random_ascii(1, 255)
+        response = self.api_client.post_login(*self.user_data)
+        assert response.status_code == 401 and self.check_user_active(self.username, 0)
+
     @allure.description("""Adding new user via API""")
     def test_add_user(self, new_user):
         response = new_user
@@ -34,6 +54,7 @@ class TestApi(BaseCaseApi):
         assert response.status_code == 200
 
     @allure.description("""Blocking user via API""")
+    @pytest.mark.xfail(strict=False)
     @pytest.mark.usefixtures('new_user_to_db')
     def test_block_user(self):
         response = self.api_client.get_block_user(self.username)
@@ -49,7 +70,7 @@ class TestApi(BaseCaseApi):
     @allure.description("""Trying to add user with already existing email via API""")
     @pytest.mark.usefixtures('new_user_to_db')
     def test_negative_add_user_with_existing_email(self):
-        self.user_data[0] = self.random_ascii(5, 16)
+        self.user_data[0] = self.random_ascii(6, 16)
         response = self.api_client.post_add_user(*self.user_data)
         assert response.status_code == 304 and not self.check_user_pass_email(*self.user_data)
 
@@ -78,9 +99,11 @@ class TestApiFieldValid(BaseCaseApi):
         response = self.api_client.post_add_user(*self.user_data)
         assert response.status_code != 500 and not self.check_user_pass_email(*self.user_data)
 
-    # @allure.description("""Negative testing of the username field validation in API""")
-    # @pytest.mark.parametrize('username', [BaseCaseApi.random_ascii(min_len=n, max_len=n) for n in (0, 1, 2, 3, 4, 17)])
-    # def test_username_validation_negative(self, username):
-    #     self.user_data[0] = username
-    #     response = self.api_client.post_add_user(*self.user_data)
-    #     assert response.status_code != 500 and not self.check_user_pass_email(*self.user_data)
+    @allure.description("""Testing of the username field validation in API""")
+    @pytest.mark.parametrize('username_length, presence_in_db',
+                             [(5, False), (6, True), (16, True), (17, False)])
+    def test_username_validation_negative(self, username_length, presence_in_db):
+        self.user_data[0] = self.random_ascii(username_length)
+        response = self.api_client.post_add_user(*self.user_data)
+        assert response.status_code != 500 and\
+               (self.check_user_pass_email(*self.user_data) and presence_in_db)

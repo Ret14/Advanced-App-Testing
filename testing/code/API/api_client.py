@@ -3,7 +3,6 @@ import requests
 import allure
 
 logger = logging.getLogger('test')
-MAX_RESPONSE_LENGTH = 300
 
 
 class ApiClient:
@@ -64,10 +63,31 @@ class ApiClient:
                                        summary='Logging in', json=data)
         return response
 
+    @allure.step('Signing up with http request')
+    def post_registry(self, username, password, email):
+        data = {
+            'username': username,
+            'email': email,
+            'password': password,
+            'confirm': password,
+            'term': 'y',
+            'submit': 'Register'
+        }
+        response = self.logged_request(method='POST', url=f'{self.app_url}/reg',
+                                       summary='Signing up', json=data)
+        return response
+
+    @allure.step('Signing up with http request')
+    def get_logout(self):
+
+        response = self.logged_request(method='GET', url=f'{self.app_url}/logout',
+                                       summary='Logging out')
+        return response
+
     @staticmethod
     def log_pre(method, url, summary, json=None):
         data = ''
-        if not json is None:
+        if json is not None:
             for elem in json:
                 data += f'{elem}: {json[elem]}\n'
 

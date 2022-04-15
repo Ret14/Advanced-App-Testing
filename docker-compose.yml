@@ -6,20 +6,20 @@ networks:
     name: test-net
 
 services:
-  tests:
-    container_name: tests
-    build: ./testing
-    volumes:
-      - "$WORKSPACE/allure-results:/tmp/allure"
-      - "$WORKSPACE/logs:/src/logs"
-      - "$WORKSPACE/allure-report:/tmp/allure-report"
-    environment:
-      - USERNAME
-      - PASSWORD
-      - WORKSPACE
-    depends_on:
-      myapp:
-        condition: service_healthy
+#  tests:
+#    container_name: tests
+#    build: ./testing
+#    volumes:
+#      - "$WORKSPACE/allure-results:/tmp/allure"
+#      - "$WORKSPACE/logs:/src/logs"
+#      - "$WORKSPACE/allure-report:/tmp/allure-report"
+#    environment:
+#      - USERNAME
+#      - PASSWORD
+#      - WORKSPACE
+#    depends_on:
+#      myapp:
+#        condition: service_healthy
 
   mock:
     container_name: mock
@@ -66,26 +66,26 @@ services:
         condition: service_healthy
       mock:
         condition: service_healthy
-
-  selenoid:
-    image: "aerokube/selenoid"
-    container_name: selenoid
-    volumes:
-      - ./configs/selenoid_config/config:/etc/selenoid
-      - /var/run/docker.sock:/var/run/docker.sock
-      - ./configs/selenoid_config/video:/opt/selenoid/video
-      - ./configs/selenoid_config/logs:/opt/selenoid/logs
-    environment:
-      - OVERRIDE_VIDEO_OUTPUT_DIR=./configs/selenoid_config/video
-    command: [ "-conf", "/etc/selenoid/browsers.json", "-video-output-dir",
-               "/opt/selenoid/video", "-log-output-dir", "/opt/selenoid/logs",
-               "-container-network", "test-net" ]
-    ports:
-      - "4004:4444"
-
-  selenoid-ui:
-    container_name: selenoid-ui
-    image: "aerokube/selenoid-ui"
-    ports:
-      - "4005:8080"
-    command: [ "--selenoid-uri", "http://selenoid:4444" ]
+#
+#  selenoid:
+#    image: "aerokube/selenoid"
+#    container_name: selenoid
+#    volumes:
+#      - ./configs/selenoid_config/config:/etc/selenoid
+#      - /var/run/docker.sock:/var/run/docker.sock
+#      - ./configs/selenoid_config/video:/opt/selenoid/video
+#      - ./configs/selenoid_config/logs:/opt/selenoid/logs
+#    environment:
+#      - OVERRIDE_VIDEO_OUTPUT_DIR=./configs/selenoid_config/video
+#    command: [ "-conf", "/etc/selenoid/browsers.json", "-video-output-dir",
+#               "/opt/selenoid/video", "-log-output-dir", "/opt/selenoid/logs",
+#               "-container-network", "test-net" ]
+#    ports:
+#      - "4004:4444"
+#
+#  selenoid-ui:
+#    container_name: selenoid-ui
+#    image: "aerokube/selenoid-ui"
+#    ports:
+#      - "4005:8080"
+#    command: [ "--selenoid-uri", "http://selenoid:4444" ]

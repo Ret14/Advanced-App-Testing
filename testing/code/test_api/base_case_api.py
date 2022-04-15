@@ -12,3 +12,7 @@ class BaseCaseApi(BaseCase):
     def new_user(self, user_data):
         yield self.api_client.post_add_user(*user_data)
         self.api_client.get_delete_user(user_data[0])
+
+    @pytest.fixture(scope='function')
+    def not_authorized(self, api_client):
+        self.api_client.get_logout()

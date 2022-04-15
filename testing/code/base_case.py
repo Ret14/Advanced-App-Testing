@@ -25,12 +25,20 @@ class BaseCase:
         return self.mysql_client.session.query(AppUsers).filter(
                 AppUsers.username == username).all()
 
+    def check_user_active(self, username, active):
+        self.mysql_client.session.commit()
+        return self.mysql_client.session.query(AppUsers).filter(
+            AppUsers.username == username, AppUsers.active == active).all()
+
     def check_user_access(self, username, access):
         self.mysql_client.session.commit()
         return self.mysql_client.session.query(AppUsers).filter(
             AppUsers.username == username, AppUsers.access == access).all()
 
-    def random_ascii(self, min_len, max_len):
+    def random_ascii(self, min_len=None, max_len=None):
+        if max_len is None:
+            max_len = min_len
+
         letters_set = self.read_file('./utils/printable.txt')[0]
 
         return ''.join(random.choice(letters_set) for _ in range(random.randint(min_len, max_len)))
@@ -60,7 +68,7 @@ class BaseCase:
 
     @pytest.fixture(scope='function')
     def user_data(self):
-        return [self.random_ascii(5, 16), self.random_ascii(1, 255), self.fake.email()]
+        return [self.random_ascii(6, 16), self.random_ascii(1, 255), self.fake.email()]
 
     @staticmethod
     def read_file(filename):
