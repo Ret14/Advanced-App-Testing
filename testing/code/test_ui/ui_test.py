@@ -36,7 +36,7 @@ class TestUIRegistryFieldValidation(BaseCaseUI):
     def test_ui_username_validation(self, username_length, expected, request):
         registry_page = request.getfixturevalue('registry_page')
         self.user_data[0] = self.random_ascii(username_length)
-        url_after_registry = registry_page.register(*self.user_data)
+        url_after_registry = registry_page.register_and_login(*self.user_data)
         self.make_a_shot(f'register_with_username_{self.user_data[0]}')
         assert (url_after_registry.endswith('/welcome/') == expected) and \
                (registry_page.catch_validation_error()['username'] == expected)
