@@ -22,18 +22,18 @@ class BaseCase:
 
     def check_user(self, username):
         self.mysql_client.session.commit()
-        return self.mysql_client.session.query(AppUsers).filter(
-                AppUsers.username == username).all()
+        return bool(self.mysql_client.session.query(AppUsers).filter(
+                AppUsers.username == username).all())
 
     def check_user_active(self, username, active):
         self.mysql_client.session.commit()
-        return self.mysql_client.session.query(AppUsers).filter(
-            AppUsers.username == username, AppUsers.active == active).all()
+        return bool(self.mysql_client.session.query(AppUsers).filter(
+            AppUsers.username == username, AppUsers.active == active).all())
 
     def check_user_access(self, username, access):
         self.mysql_client.session.commit()
-        return self.mysql_client.session.query(AppUsers).filter(
-            AppUsers.username == username, AppUsers.access == access).all()
+        return bool(self.mysql_client.session.query(AppUsers).filter(
+            AppUsers.username == username, AppUsers.access == access).all())
 
     def random_ascii(self, min_len=None, max_len=None):
         if max_len is None:
@@ -45,9 +45,9 @@ class BaseCase:
 
     def check_user_pass_email(self, username, password, email):
         self.mysql_client.session.commit()
-        return self.mysql_client.session.query(AppUsers).filter(
+        return bool(self.mysql_client.session.query(AppUsers).filter(
             AppUsers.username == username, AppUsers.password == password,
-            AppUsers.email == email).all()
+            AppUsers.email == email).all())
 
     @pytest.fixture(scope='function')
     def new_user_to_db(self, user_data):

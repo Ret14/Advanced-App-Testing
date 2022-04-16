@@ -14,5 +14,5 @@ class BaseCaseApi(BaseCase):
         self.api_client.get_delete_user(user_data[0])
 
     @pytest.fixture(scope='function')
-    def not_authorized(self, api_client):
+    def not_authorized(self):
         self.api_client.get_logout()

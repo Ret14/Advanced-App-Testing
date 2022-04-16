@@ -6,7 +6,7 @@ from test_api.base_case_api import BaseCaseApi
 class TestApi(BaseCaseApi):
 
     @allure.description("""Logging in with correct credentials via API""")
-    @pytest.mark.usefixtures('new_user_to_db, not_authorized')
+    @pytest.mark.usefixtures('new_user_to_db', 'not_authorized')
     def test_login_positive(self):
         response = self.api_client.post_login(*self.user_data)
         assert response.status_code == 302 and self.check_user_active(self.username, 1)
