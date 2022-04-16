@@ -5,14 +5,14 @@ class TimeoutException(Exception):
     pass
 
 
-def wait(method, error=Exception, timeout=10, interval=0.5, check=True, **kwargs):
+def wait(method, error=Exception, timeout=10, interval=0.5, check=True, expected=True, **kwargs):
     started = time.time()
     last_exception = None
     while time.time() - started < timeout:
         try:
             result = method(**kwargs)
             if check:
-                if result:
+                if result and expected:
                     return result
                 last_exception = f'Method {method.__name__} returned {result}'
             else:

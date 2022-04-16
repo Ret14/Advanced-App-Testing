@@ -105,5 +105,5 @@ class TestApiFieldValid(BaseCaseApi):
     def test_username_validation_negative(self, username_length, presence_in_db):
         self.user_data[0] = self.random_ascii(username_length)
         response = self.api_client.post_add_user(*self.user_data)
-        assert response.status_code != 500 and\
-               (self.check_user_pass_email(*self.user_data) and presence_in_db)
+        assert response.status_code != 500 and \
+               (self.check_user_pass_email(*self.user_data) == presence_in_db)

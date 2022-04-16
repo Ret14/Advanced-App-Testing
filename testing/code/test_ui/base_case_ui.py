@@ -49,6 +49,10 @@ class BaseCaseUI(BaseCase):
             with open(browser_log, 'r') as f:
                 allure.attach(f.read(), 'browser.log', attachment_type=allure.attachment_type.TEXT)
 
+    @pytest.fixture(scope='function')
+    def registry_page(self):
+        return self.login_page.go_to_registry_page()
+
     def make_a_shot(self, name=None):
         name = name + '.png'
         screenshot = os.path.join(self.test_dir, name)

@@ -2,6 +2,8 @@ from ui.pages.base_page import BasePage
 from ui.locators import locators
 import allure
 
+from ui.pages.registry_page import RegistryPage
+
 
 class LoginPage(BasePage):
 
@@ -15,6 +17,6 @@ class LoginPage(BasePage):
         current_url = self.redirect_wait(timeout=1)
         return current_url
 
-    # def go_to_registry_page(self):
-    #     self.click(self.locators.REGISTRY_FIELD)
-    #     return RegistryPage(driver=self.driver)
+    def go_to_registry_page(self):
+        self.click(self.locators.REGISTRY_FIELD)
+        return RegistryPage(driver=self.driver)

@@ -33,6 +33,9 @@ class BasePage(object):
         self.find(locator).send_keys(query)
         self.logger.info(f'Filling up {locator} field')
 
+    def search_by_text(self, query, expected=True):
+        return self.is_on_page(self.format_locator(self.locators.TEXT_SEARCH, query)) and expected
+
     @property
     def action_chains(self):
         return ActionChains(self.driver)
@@ -57,11 +60,8 @@ class BasePage(object):
                 if i == 2:
                     raise
 
-    def elements_find(self, locator):
-        return self.driver.find_elements(locator[0], locator[1])
-
-    def not_on_page(self, locator):
-        return not self.elements_find(locator=locator)
+    def is_on_page(self, locator):
+        return self.driver.find_elements(*locator)
 
     @staticmethod
     def format_locator(locator: tuple, value=None):
@@ -87,7 +87,10 @@ class BasePage(object):
 
         return file_lines
 
-    def random_ascii(self, min_len, max_len):
+    def random_ascii(self, min_len=None, max_len=None):
+        if max_len is None:
+            max_len = min_len
+
         letters_set = self.read_file('./utils/printable.txt')[0]
 
         return ''.join(random.choice(letters_set) for _ in range(random.randint(min_len, max_len)))
