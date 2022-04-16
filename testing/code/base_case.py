@@ -71,6 +71,14 @@ class BaseCase:
         return [self.random_ascii(6, 16), self.random_ascii(1, 255), self.fake.email()]
 
     @staticmethod
+    def random_email_with_fixed_len(length):
+        if length < 7:
+            return False
+
+        return ''.join(random.choice(string.ascii_letters + string.digits)
+                       for _ in range(length-6)) + '@aa.aa'
+
+    @staticmethod
     def read_file(filename):
         file_lines = []
         with open(filename, 'r') as f:

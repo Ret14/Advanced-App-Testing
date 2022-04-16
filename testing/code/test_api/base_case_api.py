@@ -1,3 +1,4 @@
+import os
 import pytest
 from base_case import BaseCase
 
@@ -16,3 +17,5 @@ class BaseCaseApi(BaseCase):
     @pytest.fixture(scope='function')
     def not_authorized(self):
         self.api_client.get_logout()
+        yield
+        self.api_client.post_login(os.environ['USERNAME'], os.environ['PASSWORD'])

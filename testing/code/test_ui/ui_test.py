@@ -33,10 +33,34 @@ class TestUIRegistryFieldValidation(BaseCaseUI):
 
     @pytest.mark.parametrize('username_length, expected',
                              [(5, False), (6, True), (16, True), (17, False)])
+    @allure.description("""Trying to signin up with strict username length""")
     def test_ui_username_validation(self, username_length, expected, request):
+
         registry_page = request.getfixturevalue('registry_page')
         self.user_data[0] = self.random_ascii(username_length)
         url_after_registry = registry_page.register_and_login(*self.user_data)
         self.make_a_shot(f'register_with_username_{self.user_data[0]}')
         assert (url_after_registry.endswith('/welcome/') == expected) and \
                (registry_page.catch_validation_error()['username'] == expected)
+
+    @pytest.mark.parametrize('email_length, expected', [(64, True), (65, False)])
+    @allure.description("""Trying to signin up with strict email length""")
+    def test_ui_username_validation(self, email_length, expected, request):
+
+        registry_page = request.getfixturevalue('registry_page')
+        self.user_data[2] = self.random_ascii(email_length)
+        url_after_registry = registry_page.register_and_login(*self.user_data)
+        self.make_a_shot(f'signing_up_and_email_length_is_{email_length}')
+        assert (url_after_registry.endswith('/welcome/') == expected) and \
+               (registry_page.catch_validation_error()['email'] == expected)
+
+    @pytest.mark.parametrize('password_length, expected', [(255, True), (256, False)])
+    @allure.description("""Trying to signin up with strict password length""")
+    def test_ui_username_validation(self, password_length, expected, request):
+
+        registry_page = request.getfixturevalue('registry_page')
+        self.user_data[1] = self.random_ascii(password_length)
+        url_after_registry = registry_page.register_and_login(*self.user_data)
+        self.make_a_shot(f'signing_up_and_password_length_is_{password_length}')
+        assert (url_after_registry.endswith('/welcome/') == expected) and \
+               (registry_page.catch_validation_error()['password'] == expected)

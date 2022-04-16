@@ -23,7 +23,7 @@ services:
 
   mock:
     container_name: mock
-    image: "mock:latest"
+    build: ./mock
     ports:
       - "4001:4001"
     healthcheck:

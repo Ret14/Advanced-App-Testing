@@ -8,21 +8,21 @@ class TestApi(BaseCaseApi):
     @allure.description("""Logging in with correct credentials via API""")
     @pytest.mark.usefixtures('new_user_to_db', 'not_authorized')
     def test_login_positive(self):
-        response = self.api_client.post_login(*self.user_data)
+        response = self.api_client.post_login(*self.user_data[0:2])
         assert response.status_code == 302 and self.check_user_active(self.username, 1)
 
     @allure.description("""Logging in with incorrect username via API""")
     @pytest.mark.usefixtures('new_user_to_db', 'not_authorized')
     def test_login_negative_false_username(self):
         self.user_data[0] = self.random_ascii(6, 16)
-        response = self.api_client.post_login(*self.user_data)
+        response = self.api_client.post_login(*self.user_data[0:2])
         assert response.status_code == 401 and self.check_user_active(self.username, 0)
 
     @allure.description("""Logging in with incorrect password via API""")
     @pytest.mark.usefixtures('new_user_to_db', 'not_authorized')
     def test_login_negative_false_password(self):
         self.user_data[1] = self.random_ascii(1, 255)
-        response = self.api_client.post_login(*self.user_data)
+        response = self.api_client.post_login(*self.user_data[0:2])
         assert response.status_code == 401 and self.check_user_active(self.username, 0)
 
     @allure.description("""Adding new user via API""")
