@@ -42,8 +42,8 @@ def pytest_unconfigure(config):
 
 @pytest.fixture(scope='function')
 def temp_dir(request):
-    test_dir = os.path.join(request.config.base_temp_dir,
-                            request._pyfuncitem.node.originalname.replace('/', '_').replace(':', '_'))
+
+    test_dir = os.path.join(request.config.base_temp_dir, request.node.name)
     os.makedirs(test_dir)
     return test_dir
 
