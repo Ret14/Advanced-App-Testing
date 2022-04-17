@@ -1,9 +1,7 @@
 #!/usr/bin/env python3.8
 import random
-import string
 import threading
 import logging
-import time
 import signal
 from flask import Flask, jsonify, request
 from SQL.models.model import *
@@ -23,7 +21,7 @@ signal.signal(signal.SIGINT, exit_gracefully)
 signal.signal(signal.SIGTERM, exit_gracefully)
 
 app = Flask(__name__)
-VK_IDS = {}
+VK_IDS = dict()
 mysql_client = MysqlORMClient()
 logger = logging.getLogger('werkzeug')
 handler = logging.FileHandler('test.log')
@@ -34,17 +32,28 @@ logger.addHandler(handler)
 def get_vk_id(username):
     if check_active(username):
         if username not in VK_IDS:
-            VK_IDS[username] = generate_string()
+            VK_IDS[username] = random_ascii(15)
 
         return jsonify({'vk_id': f'{VK_IDS[username]}'}), 200
     return jsonify({}), 404
 
 
-def generate_string(length=6):
-    letters = string.ascii_lowercase
-    random_string = ''.join(random.choice(letters) for _ in range(length))
-    random_string = random_string + str(int(time.time()) % 10000)
-    return random_string
+def read_file(filename):
+    file_lines = []
+    with open(filename, 'r') as f:
+        for line in f:
+            file_lines.append(line.strip())
+
+    return file_lines
+
+
+def random_ascii(min_len=None, max_len=None):
+    if max_len is None:
+        max_len = min_len
+
+    letters_set = read_file('./printable.txt')[0]
+
+    return ''.join(random.choice(letters_set) for _ in range(random.randint(min_len, max_len)))
 
 
 def shutdown_mock():
@@ -56,8 +65,8 @@ def shutdown_mock():
 
 def check_active(username):
     mysql_client.session.commit()  # need to expire current models and get updated data from MySQL
-    return mysql_client.session.query(AppUsers).filter(AppUsers.username==username,
-                                                       AppUsers.access==1).all()
+    return bool(mysql_client.session.query(AppUsers).filter(
+            AppUsers.username == username, AppUsers.active == 1).all())
 
 
 @app.route('/shutdown')

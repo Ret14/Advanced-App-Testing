@@ -19,3 +19,7 @@ class LoginPageLocators(BaseLocators):
     PASSWORD_INPUT = (By.ID, 'password')
     SUBMIT_BTN = (By.ID, 'submit')
     REGISTRY_FIELD = (By.XPATH, '//a')
+
+
+class MainPageLocators(BaseLocators):
+    LOGOUT_BTN = (By.ID, 'logout')

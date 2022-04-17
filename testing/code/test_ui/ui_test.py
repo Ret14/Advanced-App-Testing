@@ -28,39 +28,31 @@ class TestUI(BaseCaseUI):
         assert not url_after_login.endswith('/welcome/')
         self.make_a_shot('login_negative_false_username')
 
+    @allure.description("""Initiating logout""")
+    def test_ui_logout(self, main_page):
+        url_after_logout = main_page.logout()
+        assert not url_after_logout.endswith('/welcome/') and self.check_user_active(self.user_data[0], 0)
+        self.make_a_shot('after_logout')
+
 
 class TestUIRegistryFieldValidation(BaseCaseUI):
 
-    @pytest.mark.parametrize('username_length, expected',
-                             [(5, False), (6, True), (16, True), (17, False)])
-    @allure.description("""Trying to signin up with strict username length""")
-    def test_ui_username_validation(self, username_length, expected, request):
-
+    @pytest.mark.parametrize('field_type, field_length, expected',
+                             [('username', 5, False), ('username', 6, True), ('username', 16, True),
+                              ('username', 17, False), ('email', 64, True), ('email', 65, False),
+                              ('password', 1, True), ('password', 255, True), ('password', 256, False)])
+    @allure.description("""Testing {field_type} field validation on sign up page""")
+    def test_ui_validation_all(self, field_type, field_length, expected, request):
         registry_page = request.getfixturevalue('registry_page')
-        self.user_data[0] = self.random_ascii(username_length)
+        if field_type == 'username':
+            self.user_data[0] = self.random_ascii(field_length)
+        elif field_type == 'password':
+            self.user_data[1] = self.random_ascii(field_length)
+        else:
+            self.user_data[2] = self.random_email_with_fixed_len(field_length)
+
         url_after_registry = registry_page.register_and_login(*self.user_data)
-        self.make_a_shot(f'register_with_username_{self.user_data[0]}')
         assert (url_after_registry.endswith('/welcome/') == expected) and \
-               (registry_page.catch_validation_error()['username'] == expected)
-
-    @pytest.mark.parametrize('email_length, expected', [(64, True), (65, False)])
-    @allure.description("""Trying to signin up with strict email length""")
-    def test_ui_username_validation(self, email_length, expected, request):
-
-        registry_page = request.getfixturevalue('registry_page')
-        self.user_data[2] = self.random_ascii(email_length)
-        url_after_registry = registry_page.register_and_login(*self.user_data)
-        self.make_a_shot(f'signing_up_and_email_length_is_{email_length}')
-        assert (url_after_registry.endswith('/welcome/') == expected) and \
-               (registry_page.catch_validation_error()['email'] == expected)
-
-    @pytest.mark.parametrize('password_length, expected', [(255, True), (256, False)])
-    @allure.description("""Trying to signin up with strict password length""")
-    def test_ui_username_validation(self, password_length, expected, request):
-
-        registry_page = request.getfixturevalue('registry_page')
-        self.user_data[1] = self.random_ascii(password_length)
-        url_after_registry = registry_page.register_and_login(*self.user_data)
-        self.make_a_shot(f'signing_up_and_password_length_is_{password_length}')
-        assert (url_after_registry.endswith('/welcome/') == expected) and \
-               (registry_page.catch_validation_error()['password'] == expected)
+               (registry_page.catch_validation_error()[field_type] == expected) and \
+               (self.check_user_access(self.user_data[0], 1) == expected)
+        self.make_a_shot(f'signing_up;{field_type}_length_is_{field_length}')

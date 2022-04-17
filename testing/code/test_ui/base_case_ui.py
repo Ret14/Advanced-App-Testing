@@ -5,6 +5,7 @@ import pytest
 import allure
 from ui.pages.login_page import LoginPage
 from selenium.webdriver.chrome.options import Options
+from ui.pages.main_page import MainPage
 
 
 class BaseCaseUI(BaseCase):
@@ -52,6 +53,14 @@ class BaseCaseUI(BaseCase):
     @pytest.fixture(scope='function')
     def registry_page(self):
         return self.login_page.go_to_registry_page()
+
+    @pytest.fixture(scope='function')
+    def main_page(self, driver, user_data, new_user_to_db):
+        url_after_login = self.login_page.authorize(*user_data[0:2])
+        if url_after_login.endswith('/welcome/'):
+            return MainPage(driver=driver)
+
+        return None
 
     def make_a_shot(self, name=None):
         name = name + '.png'
